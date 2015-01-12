@@ -24,3 +24,7 @@ dependencies:
 test:
     override:
         - tox
+
+after_success:
+    - pip install coveralls
+    - coveralls
