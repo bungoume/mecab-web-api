@@ -1,3 +1,11 @@
-from django.shortcuts import render
+from django.http import JsonResponse
 
-# Create your views here.
+
+def parse(request):
+    text = request.GET.get('text', '')
+
+    ret = {
+        'text': text,
+    }
+
+    return JsonResponse(ret)
