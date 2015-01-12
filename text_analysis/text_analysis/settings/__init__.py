@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     # Third-party applications
 
     # Project applications
+    'main',
 )
 
 MIDDLEWARE_CLASSES = (
