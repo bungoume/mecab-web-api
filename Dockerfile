@@ -1,4 +1,17 @@
-FROM python:3-onbuild
+FROM python:3.4.2
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+RUN \
+  apt-get update -qq && \
+  apt-get install -qq libmecab-dev && \
+  apt-get install -qq mecab mecab-ipadic-utf8
+
+COPY requirements.txt /usr/src/app/
+RUN pip install -r requirements.txt
+
+COPY . /usr/src/app
 
 RUN pip install uWSGI
 
