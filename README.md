@@ -6,6 +6,8 @@
 
 MeCabを利用した形態素解析WebAPI
 
+![typography-icon](typography-icon.png)
+
 
 ## Licence
 
