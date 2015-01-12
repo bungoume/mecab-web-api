@@ -7,6 +7,7 @@ dependencies:
     - mecab-0.996
     - mecab-ipadic-2.7.0-20070801
   pre:
+    - pip install coveralls
     - sudo apt-get update -qq
     - sudo apt-get install -qq python3-dev
     - wget https://mecab.googlecode.com/files/mecab-0.996.tar.gz &&
@@ -25,5 +26,4 @@ test:
     override:
         - tox
     post:
-        - pip install coveralls
         - coveralls
