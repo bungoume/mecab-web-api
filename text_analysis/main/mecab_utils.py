@@ -105,7 +105,7 @@ def yomi_sentence(sentence, nbest_num=10):
             continue
 
         yomi = yomi.lower()
-        roma = to_romaji(yomi)
+        roma = remove_mark(to_romaji(yomi))
         ret = {
             'yomi': yomi,
             'romaji': roma,
@@ -170,6 +170,7 @@ def parse_sentence(sentence, nbest_num=3):
     for nbest in nbests:
         words = list(map(parse_line, nbest.strip().split('\n')))
         yomis = list(map(lambda x: x['yomi'], words))
+        roma = to_romaji(''.join(yomis)).lower()
 
         ret = {
             'all': {
@@ -178,7 +179,7 @@ def parse_sentence(sentence, nbest_num=3):
                 'length': len(sentence),
                 'cost': sum(map(lambda x: x['cost'], words)),
                 'yomi': ''.join(yomis),
-                'romaji': to_romaji(''.join(yomis)).lower(),
+                'romaji': remove_mark(roma),
                 'wakati': ' '.join(map(lambda x: x['word'], words)),
                 'wakati_yomi': ' '.join(yomis),
             },
