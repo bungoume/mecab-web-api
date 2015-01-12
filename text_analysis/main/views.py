@@ -1,11 +1,25 @@
 from django.http import JsonResponse
 
+from main import mecab_utils
 
-def parse(request):
-    text = request.GET.get('text', '')
+
+def yomi(request):
+    sentence = request.GET.get('sentence', '')
 
     ret = {
-        'text': text,
+        'sentence': sentence,
+        'items': mecab_utils.yomi_sentence(sentence),
+    }
+
+    return JsonResponse(ret)
+
+
+def parse(request):
+    sentence = request.GET.get('sentence', '')
+
+    ret = {
+        'sentence': sentence,
+        'items': mecab_utils.parse_sentence(sentence),
     }
 
     return JsonResponse(ret)
