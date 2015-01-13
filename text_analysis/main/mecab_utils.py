@@ -179,9 +179,9 @@ def parse_sentence(sentence, nbest_num=3):
                 'normalized': sentence,
                 'length': len(sentence),
                 'cost': sum(map(lambda x: x['cost'], words)),
-                'yomi': ''.join(yomis),
-                'romaji': remove_mark(roma),
-                'wakati': ' '.join(map(lambda x: x['word'], words)),
+                'reading': ''.join(yomis),
+                'ime_romaji': remove_mark(roma),
+                'wakati': ' '.join(map(lambda x: x['surface'], words)),
                 'wakati_yomi': ' '.join(yomis),
             },
             'words': words
