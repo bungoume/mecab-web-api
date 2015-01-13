@@ -7,7 +7,7 @@ def yomi(request):
     sentence = request.GET.get('sentence', '')
 
     ret = {
-        'sentence': sentence,
+        'input_sentence': sentence,
         'items': mecab_utils.yomi_sentence(sentence),
     }
 
@@ -18,7 +18,7 @@ def parse(request):
     sentence = request.GET.get('sentence', '')
 
     ret = {
-        'sentence': sentence,
+        'input_sentence': sentence,
         'items': mecab_utils.parse_sentence(sentence),
     }
 

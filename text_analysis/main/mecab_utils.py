@@ -123,7 +123,6 @@ def yomi_sentence(sentence, nbest_num=10):
 
 
 def parse_sentence(sentence, nbest_num=3):
-    raw_sentence = sentence
     sentence = unicodedata.normalize('NFKC', sentence)
 
     # node: 1つの形態素を出力, デフォルトは空文字
@@ -174,7 +173,6 @@ def parse_sentence(sentence, nbest_num=3):
 
         ret = {
             'all': {
-                'input': raw_sentence,
                 'normalized': sentence,
                 'length': len(sentence),
                 'cost': sum(map(lambda x: x['cost'], words)),
