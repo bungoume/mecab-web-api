@@ -46,7 +46,7 @@ def qwerty_kana(w):
 
 
 RE_HIRAGANA = re.compile(r'[\u3040-\u309F]')
-RE_KATAKANA = re.compile(r'[\u3040-\u30FF\uFF61-\uFF9F]')
+RE_ALL = re.compile(r'.')
 
 
 def to_romaji(w):
@@ -89,7 +89,7 @@ def to_romaji(w):
         else:
             return c
 
-    return RE_KATAKANA.sub(ctoromaji, w)
+    return RE_ALL.sub(ctoromaji, w)
 
 
 def yomi_sentence(sentence, nbest_num=10):
