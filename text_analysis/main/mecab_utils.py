@@ -151,27 +151,27 @@ def parse_sentence(sentence, nbest_num=3):
         c_cost = int(x[13])
         return {
             'morpheme': MORPHEME_TYPE[x[0]],  # 形態素種類
-            'word': x[1],  # 形態素の表層文字列
-            'whitespace': bool(len(x[2])),  # 先頭に空白を含むか
-            'hinshi0': x[3],   # 品詞
-            'hinshi1': x[4],   # 品詞細分類1
-            'hinshi2': x[5],   # 品詞細分類2
-            'hinshi3': x[6],   # 品詞細分類3
-            'katsuyogata': x[7],    # 活用型
-            'katsuyokei': x[8],     # 活用形
-            'baseform': x[9],       # 原形
-            'yomi': x[10],          # 読み
-            'hatsuon': x[11],       # 発音
-            'word_cost': w_cost,    # 単語生起コスト
-            'c_cost': c_cost,       # 1つ前の形態素との連接コスト
-            'cost': w_cost+c_cost,  # その形態素単独
-            'romaji': to_romaji(x[10]).lower(),  # ローマ字
+            'surface': x[1],  # 形態素の表層文字列
+            'with_whitespace': bool(len(x[2])),  # 先頭に空白を含むか
+            'pos': x[3],           # 品詞
+            'pos_detail1': x[4],   # 品詞細分類1
+            'pos_detail2': x[5],   # 品詞細分類2
+            'pos_detail3': x[6],   # 品詞細分類3
+            'conjugated_type': x[7],  # 活用型
+            'conjugated_form': x[8],  # 活用形
+            'baseform': x[9],         # 原形
+            'reading': x[10],         # 読み
+            'pronunciation': x[11],   # 発音
+            'word_cost': w_cost,      # 単語生起コスト
+            'c_cost': c_cost,         # 1つ前の形態素との連接コスト
+            'cost': w_cost+c_cost,    # その形態素単独
+            'ime_romaji': to_romaji(x[10]).lower(),  # ローマ字
         }
 
     ans_list = []
     for nbest in nbests:
         words = list(map(parse_line, nbest.strip().split('\n')))
-        yomis = list(map(lambda x: x['yomi'], words))
+        yomis = list(map(lambda x: x['reading'], words))
         roma = to_romaji(''.join(yomis)).lower()
 
         ret = {
