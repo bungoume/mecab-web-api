@@ -101,10 +101,9 @@ def yomi_sentence(sentence, nbest_num=10):
 
     ans_list = []
     for yomi in nbests:
+        yomi = yomi.lower()
         if yomi in map(lambda x: x['yomi'], ans_list):
             continue
-
-        yomi = yomi.lower()
         roma = remove_mark(to_romaji(yomi))
         ret = {
             'yomi': yomi,
