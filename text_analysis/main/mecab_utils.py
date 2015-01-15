@@ -92,7 +92,7 @@ def to_romaji(w):
     return RE_ALL.sub(ctoromaji, w)
 
 
-def yomi_sentence(sentence, nbest_num=10):
+def reading_sentence(sentence, nbest_num=10):
     sentence = unicodedata.normalize('NFKC', sentence)
     m = MeCab.Tagger('-Oyomi')
 
@@ -100,16 +100,16 @@ def yomi_sentence(sentence, nbest_num=10):
     nbests = parsed_text.strip().split('\n')
 
     ans_list = []
-    for yomi in nbests:
-        yomi = yomi.lower()
-        if yomi in map(lambda x: x['yomi'], ans_list):
+    for reading in nbests:
+        reading = reading.lower()
+        if reading in map(lambda x: x['reading'], ans_list):
             continue
-        roma = remove_mark(to_romaji(yomi))
+        roma = remove_mark(to_romaji(reading))
         ret = {
-            'yomi': yomi,
+            'reading': reading,
             'romaji': roma,
             # 日本語変換前の語句をひらがなに（弊害で英語名検索不可)
-            'qwerty_romaji': to_romaji(qwerty_kana(yomi)),
+            'qwerty_romaji': to_romaji(qwerty_kana(reading)),
             # 濁点・半濁点を削除
             'ignore_soundmark_romaji': remove_soundmark(roma),
             # 小書き文字を通常の仮名と同一視する
@@ -171,18 +171,18 @@ def parse_sentence(sentence, nbest_num=3):
     ans_list = []
     for nbest in nbests:
         words = list(map(parse_line, nbest.strip().split('\n')))
-        yomis = list(map(lambda x: x['reading'], words))
-        roma = to_romaji(''.join(yomis)).lower()
+        readings = list(map(lambda x: x['reading'], words))
+        roma = to_romaji(''.join(readings)).lower()
 
         ret = {
             'all': {
                 'normalized': sentence,
                 'length': len(sentence),
                 'cost': sum(map(lambda x: x['cost'], words)),
-                'reading': ''.join(yomis),
+                'reading': ''.join(readings),
                 'ime_romaji': remove_mark(roma),
                 'wakati': ' '.join(map(lambda x: x['surface'], words)),
-                'wakati_yomi': ' '.join(yomis),
+                'wakati_reading': ' '.join(readings),
             },
             'words': words
         }

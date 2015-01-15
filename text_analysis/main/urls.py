@@ -5,5 +5,5 @@ from main import views
 urlpatterns = patterns(
     '',
     url(r'^parse$', views.parse, name='parse'),
-    url(r'^yomi$', views.yomi, name='yomi'),
+    url(r'^reading$', views.reading, name='reading'),
 )
