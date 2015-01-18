@@ -1,0 +1,16 @@
+List of open-source software used/depended on this project:
+
+MeCab
+https://code.google.com/p/mecab/
+Copyright (c) 2001-2008, Taku Kudo
+Copyright (c) 2004-2008, Nippon Telegraph and Telephone Corporation
+License: BSD (https://code.google.com/p/mecab/source/browse/trunk/mecab/BSD)
+
+Django
+https://www.djangoproject.com/
+Copyright (c) Django Software Foundation and individual contributors.
+License: BSD (https://github.com/django/django/blob/master/LICENSE)
+
+mecab-python3
+https://github.com/SamuraiT/mecab-python3
+License: BSD (https://github.com/SamuraiT/mecab-python3/blob/master/BSD)
