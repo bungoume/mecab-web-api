@@ -8,9 +8,13 @@ MeCabを利用した日本語形態素解析WebAPI
 
 ![typography-icon](typography-icon.png)
 
+
 ## Description
-日本語文章を形態素に分割して、品詞や読み、ローマ字などをJSONで取得できるWebAPIを提供します。
-形態素解析にはMeCabを利用しており、MeCabによる分かち書きコストの計算結果も取得できます。
+
+文章を形態素に分割し、品詞や読みなどを取得できるJSON WebAPIを提供します。
+
+形態素解析にはMeCabを利用しており、MeCabの分かち書きコストの計算結果も取得できます。
+
 
 ## HTTP API
 ### Endpoints
@@ -18,6 +22,7 @@ MeCabを利用した日本語形態素解析WebAPI
 GET /text-analysis/v1/parse?sentence=<string>
 GET /text-analysis/v1/reading?sentence=<string>
 ```
+
 
 ## Sample Response
 ### parse API
@@ -120,6 +125,7 @@ Takes a JSON object like this:
     "input_sentence": "今日は良い天気だ"
 }
 ```
+
 
 ## Quick Start
 using Docker Hub
