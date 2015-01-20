@@ -1,4 +1,5 @@
 [report]
+include = text_analysis/**
 omit =
-    */python?.?/*
-    */site-packages/nose/*
+    text_analysis/*/tests/**
+    text_analysis/*/tests.py
