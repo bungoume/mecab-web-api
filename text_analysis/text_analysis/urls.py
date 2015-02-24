@@ -1,6 +1,5 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^text-analysis/v1/', include('main.urls')),
-)
+]
