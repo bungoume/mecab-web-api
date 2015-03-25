@@ -16,7 +16,8 @@ def remove_soundmark(w):
     w = w.replace('g', 'k')
     w = w.replace('z', 's')
     w = w.replace('d', 't')
-    w = re.sub(r'[bp]', 'h', w)
+    w = w.replace('b', 'h')
+    w = w.replace('p', 'h')
     return w
 
 
