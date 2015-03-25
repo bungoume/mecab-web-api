@@ -46,7 +46,7 @@ def qwerty_kana(w):
     return w
 
 
-RE_HIRAGANA = re.compile(r'[\u3040-\u309F]')
+# RE_HIRAGANA = re.compile(r'[\u3040-\u309F]')
 RE_ALL = re.compile(r'.')
 
 ROMAJI_DICT = {
@@ -85,8 +85,8 @@ def to_romaji(w):
     def ctoromaji(c):
         c = c.group(0)
 
-        if RE_HIRAGANA.search(c):
-            c = chr(ord(c)+96)
+        # if RE_HIRAGANA.search(c):
+        #     c = chr(ord(c)+96)
         if c in ROMAJI_DICT:
             return ROMAJI_DICT[c]
         else:
