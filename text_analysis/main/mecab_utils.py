@@ -3,10 +3,16 @@ import MeCab
 import unicodedata
 
 
+# RE_HIRAGANA = re.compile(r'[\u3040-\u309F]')
+RE_NOWORD = re.compile(r'[^\w-]')
+RE_LX = re.compile(r'[lx]')
+RE_ALL = re.compile(r'.')
+
+
 def remove_mark(w):
     """英語・ハイフン以外のもの(句読点など)を除去
     """
-    w = re.sub(r'[^\w-]', '', w)
+    w = RE_NOWORD.sub('', w)
     return w
 
 
@@ -45,9 +51,6 @@ def qwerty_kana(w):
     w = re.sub(r'n([^aiueo])', r'ん\1', w)
     return w
 
-
-# RE_HIRAGANA = re.compile(r'[\u3040-\u309F]')
-RE_ALL = re.compile(r'.')
 
 ROMAJI_DICT = {
     'ア': 'a', 'イ': 'i', 'ウ': 'u', 'エ': 'e', 'オ': 'o',
@@ -108,16 +111,17 @@ def reading_sentence(sentence, nbest_num=10):
         if reading in map(lambda x: x['reading'], ans_list):
             continue
         roma = remove_mark(to_romaji(reading))
+        no_soundmark = remove_soundmark(roma)
         ret = {
             'reading': reading,
             'romaji': roma,
             # 日本語変換前の語句をひらがなに（弊害で英語名検索不可)
             'qwerty_romaji': to_romaji(qwerty_kana(reading)),
             # 濁点・半濁点を削除
-            'ignore_soundmark_romaji': remove_soundmark(roma),
+            'ignore_soundmark_romaji': no_soundmark,
             # 小書き文字を通常の仮名と同一視する
-            'ignore_kogaki_romaji': re.sub(r'[lx]', '', roma),
-            'ignore_all_romaji': re.sub(r'[lx]', '', remove_soundmark(roma)),
+            'ignore_kogaki_romaji': RE_LX.sub('', roma),
+            'ignore_all_romaji': RE_LX.sub('', no_soundmark),
         }
         ans_list.append(ret)
 
