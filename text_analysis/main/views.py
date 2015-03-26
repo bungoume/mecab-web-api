@@ -13,10 +13,11 @@ def reading(request):
             {"error": {"code": "form_invalid", "errors": form.errors}}, status=400)
 
     sentence = form.cleaned_data.get('sentence')
+    nbest_num = form.cleaned_data.get('nbest_num')
 
     ret = {
         'input_sentence': sentence,
-        'items': mecab_utils.reading_sentence(sentence),
+        'items': mecab_utils.reading_sentence(sentence, nbest_num),
     }
 
     return JsonResponse(ret)
@@ -30,10 +31,11 @@ def parse(request):
             {"error": {"code": "form_invalid", "errors": form.errors}}, status=400)
 
     sentence = form.cleaned_data.get('sentence')
+    nbest_num = form.cleaned_data.get('nbest_num')
 
     ret = {
         'input_sentence': sentence,
-        'items': mecab_utils.parse_sentence(sentence),
+        'items': mecab_utils.parse_sentence(sentence, nbest_num),
     }
 
     return JsonResponse(ret)
