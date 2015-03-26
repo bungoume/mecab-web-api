@@ -21,6 +21,9 @@ MeCabを利用した日本語形態素解析WebAPI
 ```
 GET /text-analysis/v1/parse?sentence=<string>
 GET /text-analysis/v1/reading?sentence=<string>
+or 
+GET /v1/parse?sentence=<string>
+GET /v1/reading?sentence=<string>
 ```
 
 
@@ -28,6 +31,8 @@ GET /text-analysis/v1/reading?sentence=<string>
 ### parse API
 ```
 GET /text-analysis/v1/parse?sentence=エビフライ
+or
+GET /v1/parse?sentence=エビフライ
 ```
 
 Takes a JSON object like this:
@@ -85,9 +90,9 @@ Takes a JSON object like this:
             }
         },
         {
-            // second cost analysis result
+            "second cost analysis result"
         },
-        // ...
+        "..."
     ],
     "input_sentence": "エビフライ"
 }
@@ -97,6 +102,8 @@ Takes a JSON object like this:
 
 ```
 GET /text-analysis/v1/parse?sentence=今日は良い天気だ
+or
+GET /v1/parse?sentence=今日は良い天気だ
 ```
 
 Takes a JSON object like this:
@@ -120,7 +127,7 @@ Takes a JSON object like this:
             "qwerty_romaji": "konnnitihayoitennkida",
             "reading": "コンニチハヨイテンキダ"
         },
-        //...
+        "..."
     ],
     "input_sentence": "今日は良い天気だ"
 }
