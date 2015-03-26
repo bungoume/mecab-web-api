@@ -1,10 +1,16 @@
 from django.http import JsonResponse
 
 from main import mecab_utils
+from main.forms import ReadingForm, ParseForm
 
 
 def reading(request):
-    sentence = request.GET.get('sentence', '')
+    form = ReadingForm(request.GET)
+    if not form.is_valid():
+        return JsonResponse(
+            {"error": {"code": "form_invalid", "errors": form.errors}}, status=400)
+
+    sentence = form.cleaned_data.get('sentence')
 
     ret = {
         'input_sentence': sentence,
@@ -15,7 +21,12 @@ def reading(request):
 
 
 def parse(request):
-    sentence = request.GET.get('sentence', '')
+    form = ParseForm(request.GET)
+    if not form.is_valid():
+        return JsonResponse(
+            {"error": {"code": "form_invalid", "errors": form.errors}}, status=400)
+
+    sentence = form.cleaned_data.get('sentence')
 
     ret = {
         'input_sentence': sentence,
