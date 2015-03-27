@@ -19,11 +19,17 @@ MeCabを利用した日本語形態素解析WebAPI
 ## HTTP API
 ### Endpoints
 ```
-GET /text-analysis/v1/parse?sentence=<string>
-GET /text-analysis/v1/reading?sentence=<string>
-or 
-GET /v1/parse?sentence=<string>
-GET /v1/reading?sentence=<string>
+method: 
+  GET or POST
+path:
+  /text-analysis/v1/parse
+  /text-analysis/v1/reading
+  or 
+  /v1/parse
+  /v1/reading
+params:
+  sentence=<string>
+  nbest_num=<number> (not required)
 ```
 
 
