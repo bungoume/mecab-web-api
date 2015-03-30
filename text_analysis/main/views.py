@@ -39,3 +39,27 @@ def parse(request):
     }
 
     return JsonResponse(ret)
+
+
+def handler400(request):
+    res = JsonResponse({'error': {'code': 'bad_request',
+                                  'message': "400 Bad Request"}}, status=400)
+    return res
+
+
+def handler403(request):
+    res = JsonResponse({'error': {'code': 'permission_denied',
+                                  'message': "403 Permission Denied"}}, status=403)
+    return res
+
+
+def handler404(request):
+    res = JsonResponse({'error': {'code': 'not_found',
+                                  'message': "404 Not Found"}}, status=404)
+    return res
+
+
+def handler500(request):
+    res = JsonResponse({'error': {'code': 'server_error',
+                                  'message': "500 Internal Server Error"}}, status=500)
+    return res
