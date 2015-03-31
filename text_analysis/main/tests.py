@@ -13,6 +13,12 @@ class TestReadingApi(TestCase):
         res_data = json.loads(res.content.decode())
         self.assertEqual(res_data['items'][0]['reading'], 'キョウハヨイテンキデスネ。')
 
+    def test_control_characters(self):
+        res = self.client.get(self._getTargetURL(), {'sentence': '今日は\r\nEOS良い天気\vですね。'})
+        self.assertEqual(res.status_code, 200)
+        res_data = json.loads(res.content.decode())
+        self.assertEqual(res_data['items'][0]['reading'], 'キョウハeosヨイテンキデスネ。')
+
 
 class TestParseApi(TestCase):
     def _getTargetURL(self, *args, **kwargs):
@@ -23,6 +29,13 @@ class TestParseApi(TestCase):
         self.assertEqual(res.status_code, 200)
         res_data = json.loads(res.content.decode())
         self.assertEqual(res_data['items'][0]['all']['reading'], 'キョウハヨイテンキデスネ。')
+
+    def test_control_characters(self):
+        res = self.client.get(self._getTargetURL(), {'sentence': '今日は\r\nEOS良い天気\vですね。'})
+        self.assertEqual(res.status_code, 200)
+        res_data = json.loads(res.content.decode())
+        self.assertEqual(res_data['items'][0]['all']['reading'], 'キョウハEOSヨイテンキデスネ。')
+        self.assertEqual(res_data['items'][0]['all']['normalized'], '今日は\nEOS良い天気ですね。')
 
 
 class TestHandler400(TestCase):
