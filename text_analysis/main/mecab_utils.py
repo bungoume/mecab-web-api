@@ -9,6 +9,24 @@ RE_LX = re.compile(r'[lx]')
 RE_ALL = re.compile(r'.')
 
 
+# node: 1つの形態素を出力, デフォルトは空文字
+# unk: 1つの未知語形態素を出力, デフォルトは node と同一フォーマット
+# bos: 形態素解析の結果に先だって出力 (header 的役割), デフォルトは空文字
+# eos: 形態素解析の結果の後に出力 (footer 的役割), デフォルトは "EOS\n"
+# eon: N-best出力で, N-Bestの出力が終了したときに出力, デフォルトは空文字列
+# %s: 形態素種類, %m: 形態素の表層文字列, %pS: 先頭に空白を含むか,
+# %f[n]:
+#   0: 品詞, 1:品詞, 2:品詞, 3:品詞, 4:活用型, 5:活用形, 6:原形, 7:読み, 8:発音
+# %pw: 単語生起コスト, %pC: 1つ前の形態素との連接コスト
+M_PARSE = MeCab.Tagger('--node-format={0} --unk-format={1} --eos-format=EOS'.format(
+    r'%s\v%m\v%pS\v%f[0]\v%f[1]\v%f[2]\v%f[3]\v%f[4]\v%f[5]'
+    r'\v%f[6]\v%f[7]\v%f[8]\v%pw\v%pC\r\n',
+    r'%s\v%m\v%pS\v%f[0]\v%f[1]\v%f[2]\v%f[3]\v%f[4]\v%f[5]'
+    r'\v%f[6]\v%m\v%m\v%pw\v%pC\r\n',
+))
+M_READING = MeCab.Tagger('--node-format=%pS%f[7] --unk-format=%M --eos-format=\\r\\n')
+
+
 def remove_mark(w):
     """英語・ハイフン以外のもの(句読点など)を除去
     """
@@ -100,10 +118,11 @@ def to_romaji(w):
 
 def reading_sentence(sentence, nbest_num=10):
     sentence = unicodedata.normalize('NFKC', sentence)
-    m = MeCab.Tagger('-Oyomi')
+    sentence = sentence.replace('\v', '')
+    sentence = sentence.replace('\r', '')
 
-    parsed_text = m.parseNBest(nbest_num, sentence)
-    nbests = parsed_text.strip().split('\n')
+    parsed_text = M_READING.parseNBest(nbest_num, sentence)
+    nbests = parsed_text.strip().split('\r\n')
 
     ans_list = []
     for reading in nbests:
@@ -130,29 +149,15 @@ def reading_sentence(sentence, nbest_num=10):
 
 def parse_sentence(sentence, nbest_num=3):
     sentence = unicodedata.normalize('NFKC', sentence)
+    sentence = sentence.replace('\v', '')
+    sentence = sentence.replace('\r', '')
 
-    # node: 1つの形態素を出力, デフォルトは空文字
-    # unk: 1つの未知語形態素を出力, デフォルトは node と同一フォーマット
-    # bos: 形態素解析の結果に先だって出力 (header 的役割), デフォルトは空文字
-    # eos: 形態素解析の結果の後に出力 (footer 的役割), デフォルトは "EOS\n"
-    # eon: N-best出力で, N-Bestの出力が終了したときに出力, デフォルトは空文字列
-    # %s: 形態素種類, %m: 形態素の表層文字列, %pS: 先頭に空白を含むか,
-    # %f[n]:
-    #   0: 品詞, 1:品詞, 2:品詞, 3:品詞, 4:活用型, 5:活用形, 6:原形, 7:読み, 8:発音
-    # %pw: 単語生起コスト, %pC: 1つ前の形態素との連接コスト
-    options = '--node-format={0} --unk-format={1} --eos-format=EOS'.format(
-        r'%s\t%m\t%pS\t%f[0]\t%f[1]\t%f[2]\t%f[3]\t%f[4]\t%f[5]\t%f[6]\t%f[7]\t%f[8]\t%pw\t%pC\n',
-        r'%s\t%m\t%pS\t%f[0]\t%f[1]\t%f[2]\t%f[3]\t%f[4]\t%f[5]\t%f[6]\t%m\t%m\t%pw\t%pC\n',
-    )
-
-    m = MeCab.Tagger(options)
-
-    parsed_text = m.parseNBest(nbest_num, sentence)
+    parsed_text = M_PARSE.parseNBest(nbest_num, sentence)
     nbests = parsed_text.strip()
-    nbests = nbests.split('\nEOS')[:-1]
+    nbests = nbests.split('\r\nEOS')[:-1]
 
     def parse_line(line):
-        x = line.split('\t')
+        x = line.split('\v')
         MORPHEME_TYPE = {'0': '通常', '1': '未知語', '2': '文頭', '3': '文末'}
         w_cost = int(x[12])
         c_cost = int(x[13])
@@ -177,7 +182,7 @@ def parse_sentence(sentence, nbest_num=3):
 
     ans_list = []
     for nbest in nbests:
-        words = list(map(parse_line, nbest.strip().split('\n')))
+        words = list(map(parse_line, nbest.strip().split('\r\n')))
         readings = list(map(lambda x: x['reading'], words))
         roma = to_romaji(''.join(readings)).lower()
 
