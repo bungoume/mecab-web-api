@@ -24,7 +24,7 @@ M_PARSE = MeCab.Tagger('--node-format={0} --unk-format={1} --eos-format=EOS'.for
     r'%s\v%m\v%pS\v%f[0]\v%f[1]\v%f[2]\v%f[3]\v%f[4]\v%f[5]'
     r'\v%f[6]\v%m\v%m\v%pw\v%pC\r\n',
 ))
-M_READING = MeCab.Tagger('--node-format=%pS%f[7] --unk-format=%M --eos-format=\\r\\n')
+M_READING = MeCab.Tagger('-Oyomi')
 
 
 def remove_mark(w):
@@ -120,9 +120,10 @@ def reading_sentence(sentence, nbest_num=10):
     sentence = unicodedata.normalize('NFKC', sentence)
     sentence = sentence.replace('\v', '')
     sentence = sentence.replace('\r', '')
+    sentence = sentence.replace('\n', '')
 
     parsed_text = M_READING.parseNBest(nbest_num, sentence)
-    nbests = parsed_text.strip().split('\r\n')
+    nbests = parsed_text.strip().split('\n')
 
     ans_list = []
     for reading in nbests:
