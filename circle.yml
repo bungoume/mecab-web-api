@@ -10,13 +10,17 @@ dependencies:
     - pip install coveralls
     - sudo apt-get update -qq
     - sudo apt-get install -qq python3-dev
-    - wget https://mecab.googlecode.com/files/mecab-0.996.tar.gz &&
+    - >
+      cd ~/ &&
+      wget https://mecab.googlecode.com/files/mecab-0.996.tar.gz &&
       tar xvzf mecab-0.996.tar.gz &&
       cd mecab-0.996 &&
       ./configure --enable-utf8-only &&
       make && sudo make install &&
       sudo ldconfig
-    - wget https://mecab.googlecode.com/files/mecab-ipadic-2.7.0-20070801.tar.gz &&
+    - >
+      cd ~/ &&
+      wget https://mecab.googlecode.com/files/mecab-ipadic-2.7.0-20070801.tar.gz &&
       tar xvzf mecab-ipadic-2.7.0-20070801.tar.gz &&
       cd mecab-ipadic-2.7.0-20070801 &&
       ./configure --with-charset=utf8 &&
