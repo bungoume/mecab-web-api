@@ -11,20 +11,28 @@ dependencies:
     - sudo apt-get update -qq
     - sudo apt-get install -qq python3-dev
     - >
-      cd ~/ &&
-      wget https://mecab.googlecode.com/files/mecab-0.996.tar.gz &&
-      tar xvzf mecab-0.996.tar.gz &&
+      if [[ ! -e mecab-0.996/src/mecab ]]; then
+        wget https://mecab.googlecode.com/files/mecab-0.996.tar.gz &&
+        tar xvzf mecab-0.996.tar.gz &&
+        cd mecab-0.996 &&
+        ./configure --enable-utf8-only &&
+        make
+      fi
+    - >
       cd mecab-0.996 &&
-      ./configure --enable-utf8-only &&
-      make && sudo make install &&
+      sudo make install &&
       sudo ldconfig
     - >
-      cd ~/ &&
-      wget https://mecab.googlecode.com/files/mecab-ipadic-2.7.0-20070801.tar.gz &&
-      tar xvzf mecab-ipadic-2.7.0-20070801.tar.gz &&
+      if [[ ! -e mecab-ipadic-2.7.0-20070801/sys.dic ]]; then
+        wget https://mecab.googlecode.com/files/mecab-ipadic-2.7.0-20070801.tar.gz &&
+        tar xvzf mecab-ipadic-2.7.0-20070801.tar.gz &&
+        cd mecab-ipadic-2.7.0-20070801 &&
+        ./configure --with-charset=utf8 &&
+        make
+      fi
+    - >
       cd mecab-ipadic-2.7.0-20070801 &&
-      ./configure --with-charset=utf8 &&
-      make && sudo make install
+      sudo make install
 
 test:
     override:
