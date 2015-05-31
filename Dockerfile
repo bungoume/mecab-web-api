@@ -14,4 +14,10 @@ RUN pip install -r requirements.txt
 
 COPY . /usr/src/app
 
-CMD ["uwsgi", "uwsgi.ini"]
+RUN python text_analysis/manage.py collectstatic --noinput
+
+EXPOSE 8000
+
+ENV UWSGI_ENV production
+
+CMD ["uwsgi", "--ini", uwsgi.ini:${UWSGI_ENV}"]
