@@ -33,6 +33,13 @@ params:
 ```
 
 
+## Demo
+
+* https://app.umeice.com/text-analysis/v1/parse?sentence=すもももももももものうち&nbest_num=2
+* https://app.umeice.com/text-analysis/v1/reading?sentence=今日は良い天気だ
+
+
+
 ## Sample Response
 ### parse API
 ```
