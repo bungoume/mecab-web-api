@@ -21,3 +21,9 @@ EXPOSE 8000
 ENV UWSGI_ENV production
 
 CMD ["uwsgi", "--ini", uwsgi.ini:${UWSGI_ENV}"]
+
+# RUN pip install newrelic
+# ENV NEW_RELIC_ENVIRONMENT ${UWSGI_ENV}
+# ENV NEW_RELIC_LICENSE_KEY {{ YOUR_LICENSE_KEY }}
+# ENV NEW_RELIC_APP_NAME {{ THIS_APP_NAME }}
+# CMD ["newrelic-admin", "run-program", "uwsgi", "--ini", uwsgi.ini:${UWSGI_ENV}"]
