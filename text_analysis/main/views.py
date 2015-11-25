@@ -1,10 +1,13 @@
 from django.http import JsonResponse
+
+from django.views.decorators.cache import cache_control
 from django.views.decorators.http import require_http_methods
 
 from main import mecab_utils
 from main.forms import ReadingForm, ParseForm
 
 
+@cache_control(max_age=86400)
 @require_http_methods(["GET", "POST"])
 def reading(request):
     form = ReadingForm(request.REQUEST)
@@ -23,6 +26,7 @@ def reading(request):
     return JsonResponse(ret)
 
 
+@cache_control(max_age=86400)
 @require_http_methods(["GET", "POST"])
 def parse(request):
     form = ParseForm(request.REQUEST)
