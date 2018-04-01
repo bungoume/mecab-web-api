@@ -49,18 +49,11 @@ jobs:
           name: Run tox
           command: |
             . env/bin/activate
-            pip install -U tox coveralls
-            mkdir -p .circle_test_reposts/django
-            mkdir .circle_artifacts
+            pip install -U tox
             tox
-            test -f nosetests.xml && mv nosetests.xml .circle_test_reposts/django
-            test -f flake8.txt && mv flake8.txt .circle_artifacts
-            test -d htmlcov && mv htmlcov .circle_artifacts
       - run:
           name: coveralls
-          command: |
-            . env/bin/activate
-            coveralls
+          command: coveralls
       - save_cache:
           key: v1-myapp-{{ checksum "requirements.txt" }}
           paths:
