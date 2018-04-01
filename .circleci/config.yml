@@ -1,0 +1,84 @@
+version: 2
+jobs:
+  test:
+    working_directory: ~/myapp
+    docker:
+      - image: circleci/python:3.6.4
+    steps:
+      - checkout
+      - run:
+          command: python -m venv env
+      - restore_cache:
+          keys:
+            - v1-myapp-{{ checksum "requirements.txt" }}
+      - restore_cache:
+          keys:
+            - v1-myapp-mecab-0.996
+      - run:
+          name: Install Mecab
+          command: |
+            cd ~
+            if [[ ! -e mecab-0.996/src/mecab ]]; then
+              wget https://s3-ap-northeast-1.amazonaws.com/nikkei-dev-staticfiles/s56qhidw665gq0s2g8m6m8tde/text-analysis-api/mecab-0.996.tar.gz
+              tar xvzf mecab-0.996.tar.gz
+              rm -f mecab-0.996.tar.gz
+              cd mecab-0.996
+              ./configure --enable-utf8-only
+              make
+            else
+              cd mecab-0.996
+            fi
+            sudo make install
+            sudo ldconfig
+            sudo mkdir -p /usr/local/lib/mecab/dic
+            sudo chmod 777 /usr/local/lib/mecab/dic
+      - restore_cache:
+          keys:
+            - v1-myapp-mecab-ipadic-neologd-201804  # neologd更新時はこことsave_cacheの日付を変更してください。
+      - run:
+          name: Install neologd
+          command: |
+            if [[ ! -e /usr/local/lib/mecab/dic/mecab-ipadic-neologd/sys.dic ]]; then
+              cd ~
+              git clone --depth 1 https://github.com/neologd/mecab-ipadic-neologd.git
+              cd mecab-ipadic-neologd
+              ./bin/install-mecab-ipadic-neologd -n -y
+            fi
+            sudo sed -i "s/ipadic$/mecab-ipadic-neologd/g" /usr/local/etc/mecabrc
+      - run:
+          name: Run tox
+          command: |
+            . env/bin/activate
+            pip install -U tox
+            mkdir -p .circle_test_reposts/django
+            mkdir .circle_artifacts
+            tox
+            test -f nosetests.xml && mv nosetests.xml .circle_test_reposts/django
+            test -f flake8.txt && mv flake8.txt .circle_artifacts
+            test -d htmlcov && mv htmlcov .circle_artifacts
+      - run:
+          name: coveralls
+          command: coveralls
+      - save_cache:
+          key: v1-myapp-{{ checksum "requirements.txt" }}
+          paths:
+            - ~/myapp/.tox
+            - ~/myapp/env
+      - save_cache:
+          key: v1-myapp-mecab-0.996
+          paths:
+            - ~/mecab-0.996
+      - save_cache:
+          key: v1-myapp-mecab-ipadic-neologd-201804
+          paths:
+            - /usr/local/lib/mecab/dic/mecab-ipadic-neologd
+      - store_artifacts:
+          path: .circle_artifacts
+      - store_test_results:
+          path: .circle_test_reposts/django
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
