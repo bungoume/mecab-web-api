@@ -1,18 +1,42 @@
-FROM python:3.6.4
+FROM python:3.6.5-alpine3.7
 
-RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app && mkdir /log && \
+    apk --no-cache --update add \
+                            build-base \
+                            linux-headers \
+                            openssl \
+                            libstdc++ \
+                            bash \
+                            curl \
+                            file \
+                            git \
+                            ca-certificates && \
+    cd /tmp && \
+    wget -O mecab-0.996.tar.gz "https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7cENtOXlicTFaRUE" && \
+    tar xvzf mecab-0.996.tar.gz && \
+    cd mecab-0.996 && \
+    ./configure --enable-utf8-only && \
+    make && make install && \
+    mkdir -p /usr/local/lib/mecab/dic && \
+    chmod 777 /usr/local/lib/mecab/dic && \
+    cd /tmp && \
+    git clone --depth 1 https://github.com/neologd/mecab-ipadic-neologd.git && \
+    cd mecab-ipadic-neologd && \
+    ./bin/install-mecab-ipadic-neologd -n -y && \
+    sed -i "s/ipadic$/mecab-ipadic-neologd/g" /usr/local/etc/mecabrc && \
+    pip install uWSGI mecab-python3==0.7 && \
+    apk del build-base linux-headers && \
+    rm -rf /tmp/* /var/tmp/* /var/cache/apk/* /root/.cache/pip/*
+
 WORKDIR /usr/src/app
 
-RUN \
-  apt-get update -qq && \
-  apt-get install -qq libmecab-dev && \
-  apt-get install -qq mecab mecab-ipadic-utf8
-
-RUN pip install uWSGI
 COPY requirements.txt /usr/src/app/
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && \
+    rm -rf /tmp/* /var/tmp/* /root/.cache/pip/*
 
 COPY . /usr/src/app
+
+ENV DJANGO_SETTINGS_MODULE=text_analysis.settings.production
 
 RUN python text_analysis/manage.py collectstatic --noinput
 
