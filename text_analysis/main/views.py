@@ -8,16 +8,14 @@ from main.forms import ReadingForm, ParseForm
 
 
 @cache_control(max_age=86400)
-@require_http_methods(["GET", "POST"])
+@require_http_methods(["GET", "POST", "OPTIONS"])
 def reading(request):
     if request.method == "GET":
         form = ReadingForm(request.GET)
     elif request.method == "POST":
-        form = ReadingForm()
+        form = ReadingForm(request.POST)
     elif request.method == "OPTIONS":
         return HttpResponse({}, status=204)
-
-    form = ReadingForm(request.REQUEST)
     if not form.is_valid():
         return JsonResponse(
             {"error": {"code": "form_invalid", "errors": form.errors}}, status=400)
@@ -33,7 +31,7 @@ def reading(request):
     return JsonResponse(ret)
 
 
-#@cache_control(max_age=86400)
+@cache_control(max_age=86400)
 @require_http_methods(["GET", "POST", "OPTIONS"])
 def parse(request):
     if request.method == "GET":
