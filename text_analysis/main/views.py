@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 
 from django.views.decorators.cache import cache_control
 from django.views.decorators.http import require_http_methods
@@ -8,9 +8,14 @@ from main.forms import ReadingForm, ParseForm
 
 
 @cache_control(max_age=86400)
-@require_http_methods(["GET", "POST"])
+@require_http_methods(["GET", "POST", "OPTIONS"])
 def reading(request):
-    form = ReadingForm(request.REQUEST)
+    if request.method == "GET":
+        form = ReadingForm(request.GET)
+    elif request.method == "POST":
+        form = ReadingForm(request.POST)
+    elif request.method == "OPTIONS":
+        return HttpResponse({}, status=204)
     if not form.is_valid():
         return JsonResponse(
             {"error": {"code": "form_invalid", "errors": form.errors}}, status=400)
@@ -27,9 +32,14 @@ def reading(request):
 
 
 @cache_control(max_age=86400)
-@require_http_methods(["GET", "POST"])
+@require_http_methods(["GET", "POST", "OPTIONS"])
 def parse(request):
-    form = ParseForm(request.REQUEST)
+    if request.method == "GET":
+        form = ParseForm(request.GET)
+    elif request.method == "POST":
+        form = ParseForm(request.POST)
+    elif request.method == "OPTIONS":
+        return HttpResponse("", status=204)
     if not form.is_valid():
         return JsonResponse(
             {"error": {"code": "form_invalid", "errors": form.errors}}, status=400)
