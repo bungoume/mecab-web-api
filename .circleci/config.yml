@@ -58,7 +58,9 @@ jobs:
             test -d htmlcov && mv htmlcov .circle_artifacts
       - run:
           name: coveralls
-          command: coveralls
+          command: |
+            . env/bin/activate
+            coveralls
       - save_cache:
           key: v1-myapp-{{ checksum "requirements.txt" }}
           paths:
