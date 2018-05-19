@@ -1,7 +1,7 @@
 # mecab-web-api
 [![Circle CI](https://circleci.com/gh/bungoume/mecab-web-api.svg?style=shield)](https://circleci.com/gh/bungoume/mecab-web-api)
 [![Coverage Status](https://img.shields.io/coveralls/bungoume/mecab-web-api.svg)](https://coveralls.io/r/bungoume/mecab-web-api)
-[![Known Vulnerabilities](https://snyk.io/test/github/bungoume/mecab-web-api:requirements.txt/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/bungoume/mecab-web-api:requirements.txt?targetFile=requirements.txt)
+[![Requirements Status](https://requires.io/github/bungoume/mecab-web-api/requirements.svg?branch=master)](https://requires.io/github/bungoume/mecab-web-api/requirements/?branch=master)
 [![License](http://img.shields.io/:license-MIT-blue.svg)](http://doge.mit-license.org)
 
 MeCabを利用した日本語形態素解析WebAPI
