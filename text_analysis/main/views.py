@@ -28,7 +28,7 @@ def reading(request):
         'items': mecab_utils.reading_sentence(sentence, nbest_num),
     }
 
-    return JsonResponse(ret)
+    return JsonResponse(ret, json_dumps_params={'ensure_ascii': False, 'separators': (',', ':')})
 
 
 @cache_control(max_age=86400)
@@ -52,7 +52,7 @@ def parse(request):
         'items': mecab_utils.parse_sentence(sentence, nbest_num),
     }
 
-    return JsonResponse(ret)
+    return JsonResponse(ret, json_dumps_params={'ensure_ascii': False, 'separators': (',', ':')})
 
 
 def handler400(request):
