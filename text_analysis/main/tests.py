@@ -39,39 +39,39 @@ class TestParseApi(TestCase):
 
 
 class TestHandler400(TestCase):
-    def _callFUT(self, request):
+    def _callFUT(self, request, exception):
         from main.views import handler400
-        return handler400(request)
+        return handler400(request, exception)
 
     def test__it(self):
         import json
-        res = self._callFUT('dummy request')
+        res = self._callFUT('dummy request', "exception")
         body = json.loads(res.content.decode())
         self.assertEqual(res.status_code, 400)
         self.assertEqual(body['error']['code'], 'bad_request')
 
 
 class TestHandler403(TestCase):
-    def _callFUT(self, request):
+    def _callFUT(self, request, exception):
         from main.views import handler403
-        return handler403(request)
+        return handler403(request, exception)
 
     def test__it(self):
         import json
-        res = self._callFUT('dummy request')
+        res = self._callFUT('dummy request', "exception")
         body = json.loads(res.content.decode())
         self.assertEqual(res.status_code, 403)
         self.assertEqual(body['error']['code'], 'permission_denied')
 
 
 class TestHandler404(TestCase):
-    def _callFUT(self, request):
+    def _callFUT(self, request, exception):
         from main.views import handler404
-        return handler404(request)
+        return handler404(request, exception)
 
     def test__it(self):
         import json
-        res = self._callFUT('dummy request')
+        res = self._callFUT('dummy request', "exception")
         body = json.loads(res.content.decode())
         self.assertEqual(res.status_code, 404)
         self.assertEqual(body['error']['code'], 'not_found')
