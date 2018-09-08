@@ -55,19 +55,19 @@ def parse(request):
     return JsonResponse(ret, json_dumps_params={'ensure_ascii': False, 'separators': (',', ':')})
 
 
-def handler400(request):
+def handler400(request, exception):
     res = JsonResponse({'error': {'code': 'bad_request',
                                   'message': "400 Bad Request"}}, status=400)
     return res
 
 
-def handler403(request):
+def handler403(request, exception):
     res = JsonResponse({'error': {'code': 'permission_denied',
                                   'message': "403 Permission Denied"}}, status=403)
     return res
 
 
-def handler404(request):
+def handler404(request, exception):
     res = JsonResponse({'error': {'code': 'not_found',
                                   'message': "404 Not Found"}}, status=404)
     return res

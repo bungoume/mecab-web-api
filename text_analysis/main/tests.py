@@ -45,7 +45,7 @@ class TestHandler400(TestCase):
 
     def test__it(self):
         import json
-        res = self._callFUT('dummy request')
+        res = self._callFUT('dummy request', "exception")
         body = json.loads(res.content.decode())
         self.assertEqual(res.status_code, 400)
         self.assertEqual(body['error']['code'], 'bad_request')
@@ -58,7 +58,7 @@ class TestHandler403(TestCase):
 
     def test__it(self):
         import json
-        res = self._callFUT('dummy request')
+        res = self._callFUT('dummy request', "exception")
         body = json.loads(res.content.decode())
         self.assertEqual(res.status_code, 403)
         self.assertEqual(body['error']['code'], 'permission_denied')
@@ -71,7 +71,7 @@ class TestHandler404(TestCase):
 
     def test__it(self):
         import json
-        res = self._callFUT('dummy request')
+        res = self._callFUT('dummy request', "exception")
         body = json.loads(res.content.decode())
         self.assertEqual(res.status_code, 404)
         self.assertEqual(body['error']['code'], 'not_found')
