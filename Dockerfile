@@ -44,7 +44,7 @@ EXPOSE 8000
 
 ENV UWSGI_ENV production
 
-CMD ["uwsgi", "--ini", "uwsgi.ini:${UWSGI_ENV}"]
+CMD ["uwsgi", "--ini", "uwsgi.ini:heroku"]
 
 # RUN pip install newrelic
 # ENV NEW_RELIC_ENVIRONMENT ${UWSGI_ENV}
