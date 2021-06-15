@@ -3,13 +3,7 @@ updates:
 - package-ecosystem: pip
   directory: "/"
   schedule:
-    interval: daily
-    time: "08:00"
+    interval: weekly
+    time: "11:00"
     timezone: Asia/Tokyo
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: django
-    versions:
-    - 3.0.7
-    - 3.1.6
-    - 3.1.7
