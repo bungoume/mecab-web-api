@@ -1,4 +1,4 @@
-FROM python:3.7.0-alpine
+FROM python:3.11.7-alpine
 
 RUN mkdir -p /usr/src/app && mkdir /log && \
     apk --no-cache --update add \
