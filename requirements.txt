@@ -1,3 +1,4 @@
-Django==3.2.14
+Django==4.2.27
 django-cors-headers==3.13.0
 mecab-python3==0.7
+sqlparse>=0.5.4 # not directly required, pinned by Snyk to avoid a vulnerability
